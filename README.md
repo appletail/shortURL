@@ -4,6 +4,9 @@ URL을 작성한 뒤 버튼을 누르면 단축 URL과 QR 코드를 생성해줍
 
 ![sample](resource/sample.gif)
 
+- 단축 URL 클릭시 URL이 클립보드에 복사됩니다.
+- QR 코드 클릭시 png 파일로 저장됩니다.
+
 # 준비사항
 
 - 네이버 계정
