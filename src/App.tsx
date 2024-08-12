@@ -1,24 +1,27 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import './App.css'
 import axios from 'axios'
 import {client_id, client_secret} from './clientConfig'
+
+
+interface ErrResponse {
+  response: {
+    status: 401;
+    data: {
+      code: '1403' | '1500' | '2403' | '3403';
+    };
+  };
+}
 
 function App() {
   const [url, setUrl] = useState('')
   const [shortUrl, setShortUrl] = useState('')
   const [shortUrlQR, setShortUrlQR] = useState('')
-  const [orgUrl, setOrgUrl] = useState('')
   const [isUrlMk, setIsUrlMk] = useState(false)
-  const [errorMsg, setErrorMsg] = useState('')
+  const [orgUrl, setOrgUrl] = useState('')
   const [isError, setIsError] = useState(false)
-
-  interface ErrResponse {
-      response: {
-        data: {
-          code: '1403' | '1500' | '2403' | '3403';
-        };
-      };
-    }
+  const [errorMsg, setErrorMsg] = useState('')
+  const [isCopy, setCopy] = useState(false)
 
   const errorCode = {
     '1403': '요청 URL에 오류가 있습니다. 파라미터 이름과 파라미터 값을 확인해 주십시오.',
@@ -28,6 +31,7 @@ function App() {
   }
 
   const mkShortURL = () => {
+    setCopy(false)
     if (url) {
         axios({
           method: 'get',
@@ -47,8 +51,10 @@ function App() {
           setUrl('')
         })
         .catch((err: ErrResponse) => {
-          setErrorMsg(errorCode[err.response.data.code])
-          setIsError(true)
+          if (err.response.status === 401) {
+            setErrorMsg('client key가 없습니다.')
+          } else setErrorMsg(errorCode[err.response.data.code])
+            setIsError(true)
         });
     } else {
       setIsError(true)
@@ -56,6 +62,27 @@ function App() {
     }
   }
 
+  const handleDownloadQR = useCallback((srcUrl: string) => {
+    fetch(srcUrl, { method: 'GET' }).then((res) => res.blob()).then((blob) => {
+       const url = window.URL.createObjectURL(blob);
+       const a = document.createElement('a');
+       a.href = url;
+       a.download = 'qr.png';
+       document.body.appendChild(a);
+       a.click();
+       setTimeout(() => {
+       window.URL.revokeObjectURL(url);
+       }, 1000);
+       a.remove();
+    }).catch((err) => {
+       console.error('err', err);
+    });
+ }, []);
+
+  const handleCopyClipBoard = () => {
+    navigator.clipboard.writeText(shortUrl)
+    setCopy(true)
+  }
   return (
     <>
       <h1>단축 URL 만들기</h1>
@@ -74,10 +101,11 @@ function App() {
             {errorMsg}
           </div>
           <div style={{display: isUrlMk ? 'block' : 'none'}} className='result'>
-            <div className='short-url'>{shortUrl}</div>
-            <a href={shortUrl} target="_blank" rel="noreferrer noopener" >
-              <img src={shortUrlQR} alt="qr" className='qr' />
-            </a>
+            <div className='short-url' onClick={handleCopyClipBoard}>
+              {shortUrl}
+              {isCopy && <div className='copy'>복사되었습니다.</div>}
+            </div>
+              <img src={shortUrlQR} alt="qr" className='qr' onClick={() => handleDownloadQR(shortUrlQR)}/>
             <div className='org-url'>
               원본 url : {orgUrl}
             </div>
