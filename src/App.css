@@ -1,0 +1,42 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.card {
+  padding: 2em;
+}
+
+.input-container {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.url-input {
+  width: 30rem;
+  height: 2rem;
+}
+ 
+.result {
+  margin-top: 1rem;
+}
+
+.short-url {
+  margin-bottom: 1rem;
+  font-size: 2rem;
+}
+
+.qr {
+  width: 12rem;
+}
+
+.org-url {
+  width: 60vw;
+  margin-top: 2rem;
+  word-wrap: break-word;
+
+}
