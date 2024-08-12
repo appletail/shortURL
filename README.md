@@ -1,30 +1,69 @@
-# React + TypeScript + Vite
+# 기능
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+URL을 작성한 뒤 버튼을 누르면 단축 URL과 QR 코드를 생성해줍니다.
 
-Currently, two official plugins are available:
+![sample](resource/sample.gif)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+# 준비사항
 
-## Expanding the ESLint configuration
+- 네이버 계정
+- 네이버 Open API
+    - Client ID, Client Secret 발급
+- React, Typescript, Electron 등 개발관련 기초 지식
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+# 사용방법
 
-- Configure the top-level `parserOptions` property like this:
+## 코드 clone
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json', './tsconfig.app.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
+- 코드를 clone 합니다.
+
+```bash
+git clone https://github.com/appletail/shortURL.git
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+### 패키지 설치
+
+- 패키지 매니저를 사용해 패키지를 설치합니다.
+
+```bash
+npm install  // NPM
+yarn install  // Yarn
+```
+
+## 네이버 애플리케이션 등록
+
+[NAVER Developers](https://developers.naver.com/)에 접속하여 애플리케이션을 등록합니다.  
+
+예시)
+![예시](resource/naver_application.png)
+
+## 시크릿 키 등록하기
+
+src/clientConfig.ts 파일을 열고 Client ID와 Client Secret 입력합니다.
+
+```ts
+# clientConfig 파일 예시
+export const client_id = 'aElPa85OjQDEW34ios8426d848Z'  // Client ID 입력
+export const client_secret = 'pQ1NEv5QAE'  // Client Secret 입력
+```
+
+## 빌드하기
+
+- 터미널에서 아래 명령어를 실행합니다.
+
+```bash
+npm run build
+npm run dist
+```
+
+### 데스크탑 애플리케이션으로 만들기전 테스트를 원하는 경우
+```bash
+npm run build
+npm run electron
+```
+
+## 실행하기
+release/win-unpacked 폴더에 데스크탑 애플리케이션이 생성됩니다.  
+release/win-unpacked/shorturl.exe 파일을 실행하시면 됩니다.
+
+![alt text](resource/open_exe.gif)

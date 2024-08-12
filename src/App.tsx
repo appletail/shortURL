@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import './App.css'
 import axios from 'axios'
+import {client_id, client_secret} from './clientConfig'
 
 function App() {
   const [url, setUrl] = useState('')
@@ -33,8 +34,8 @@ function App() {
           url: 'https://openapi.naver.com/v1/util/shorturl',
           params: { url },
           headers: {
-            'X-Naver-Client-Id': '',   // Client ID 작성
-            'X-Naver-Client-Secret': ''   // Client Secret 작성
+            'X-Naver-Client-Id': client_id,
+            'X-Naver-Client-Secret': client_secret
           }
         })
         .then((res) => {
