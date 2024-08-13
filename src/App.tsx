@@ -64,15 +64,15 @@ function App() {
 
   const handleDownloadQR = useCallback((srcUrl: string) => {
     fetch(srcUrl, { method: 'GET' }).then((res) => res.blob()).then((blob) => {
-       const url = window.URL.createObjectURL(blob);
+       const url = URL.createObjectURL(blob);
        const a = document.createElement('a');
        a.href = url;
        a.download = 'qr.png';
        document.body.appendChild(a);
        a.click();
        setTimeout(() => {
-       window.URL.revokeObjectURL(url);
-       }, 1000);
+        URL.revokeObjectURL(url);
+       }, 60000);
        a.remove();
     }).catch((err) => {
        console.error('err', err);
